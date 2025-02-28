@@ -1,0 +1,9 @@
+.custom-header a:hover{
+    color: var(--erinGreen);
+}
+/* 
+@media (prefers-color-scheme: dark) {
+	:root {
+
+	}
+} */

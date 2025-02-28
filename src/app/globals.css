@@ -6,14 +6,19 @@
 }
 
 :root {
-	--background: #ffffff;
-	--foreground: #171717;
+    --background: #FFFFFF;
+    --foreground: #1A181B;
+    --primary: #ddd;
+    --darkCyan: #3E8989;
+    --erinGreen: #05F140;
+    
 }
 
 @media (prefers-color-scheme: dark) {
-	:root {
-		--background: #0a0a0a;
-		--foreground: #ededed;
+    :root {
+        --background: #1A181B;
+        --foreground: #dddddd;
+        --primary: #fff;
 	}
 }
 

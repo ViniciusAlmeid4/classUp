@@ -1,0 +1,11 @@
+.card-alerts {
+    padding: 5px;
+    border: solid 1px var(--primary);
+    border-radius: 15px;
+}
+
+/* @media (prefers-color-scheme: dark) {
+	.card-alerts {
+    
+    }
+} */

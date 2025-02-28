@@ -13,7 +13,6 @@ const eslintConfig = [
 	...compat.extends('next/core-web-vitals'),
 	{
 		rules: {
-			indent: ['error', 'tab'], // Enforce tab indentation
 			quotes: ['error', 'single', { allowTemplateLiterals: true }], // Allow backticks
 		},
 	},
