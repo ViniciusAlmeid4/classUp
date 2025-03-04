@@ -5,7 +5,7 @@ import Link from 'next/link';
 import './header.css';
 
 export default function Header() {
-	const [isOpen, setIsOpen] = useState(false);
+	const [isOpen, setIsOpen] = useState(false);    
 
 	return (
 		<header className="bg-neutral-800 shadow-md">
@@ -21,14 +21,15 @@ export default function Header() {
 						Home
 					</Link>
 					<Link href="/about" className="">
-						About
+						assignments
 					</Link>
 					<Link href="/services" className="">
-						Services
+						My Account
 					</Link>
-					<Link href="/contact" className="">
+					{/* Admins only link
+                    <Link href="/contact" className="">
 						Contact
-					</Link>
+					</Link> */}
 				</nav>
 
 				{/* MOBILE MENU BUTTON */}
