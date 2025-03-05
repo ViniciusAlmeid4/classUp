@@ -3,9 +3,6 @@ import jwt from 'jsonwebtoken';
 
 const SECRET_KEY = process.env.JWT_SECRET || 'seu_segredo_super_secreto';
 
-// Definir quais rotas precisam de autenticação
-const protectedRoutes = ['/api/protected'];
-
 export function middleware(req) {
     const { pathname } = req.nextUrl;
 
@@ -28,6 +25,9 @@ export function middleware(req) {
     }
 
     return NextResponse.next();
+
+    console.log('rodou o middleware.js');
+    
 }
 
 export const config = {

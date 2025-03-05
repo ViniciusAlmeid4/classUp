@@ -1,11 +1,14 @@
+import MyHeader from '@/components/header/Header'; // Import Header
+
 export default function Atividade() {
-	return (
-		<div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p1 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-			<header className=""></header>
-			<main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-				Pagina de usuários!!
-			</main>
-			<footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center"></footer>
-		</div>
-	);
+    return (
+        <>
+            <MyHeader />
+            <main className="flex h-screen w-full items-center justify-center">
+                <div className="flex flex-col gap-8 items-center sm:items-start">
+                    Pagina de atividades!!
+                </div>
+            </main>
+        </>
+    );
 }
