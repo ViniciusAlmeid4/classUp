@@ -1,20 +1,56 @@
+'use client'; // Ensure this is at the very top
+
+import { useState } from 'react';
 import './login.css';
 
+async function login(username, password) {
+    const res = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+        credentials: 'include', // Ensures cookies are sent
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message);
+    window.location.href = data.redirectTo;
+    return data;
+}
+
 export default function LoginPage() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+
+        try {
+            await login(email, password);
+            window.location.href = '/'; // Redirect after successful login
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
     return (
         <div className="flex min-h-screen items-center justify-center">
             <div className="w-full max-w-md p-6 rounded-2xl card-login">
                 <h2 className="text-2xl font-bold text-center">Login</h2>
 
-                <form className="mt-6">
+                <form className="mt-6" onSubmit={handleSubmit}>
                     {/* Email Field */}
                     <div>
                         <label className="block font-medium">Email</label>
                         <input
-                            type="email"
+                            type="text"
+                            // type="email"
                             className="mt-1 w-full px-4 py-2 border rounded-lg"
                             placeholder="Enter your email"
                             required
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
 
@@ -26,19 +62,13 @@ export default function LoginPage() {
                             className="mt-1 w-full px-4 py-2 border rounded-lg"
                             placeholder="Enter your password"
                             required
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
 
-                    {/* Remember Me & Forgot Password */}
-                    <div className="flex justify-between items-center mt-4">
-                        <label className="flex items-center">
-                            <input type="checkbox" className="text-blue-500" />
-                            <span className="ml-2 text-sm">Remember me</span>
-                        </label>
-                        <a href="#" className="text-primary text-sm hover:underline">
-                            Forgot password?
-                        </a>
-                    </div>
+                    {/* Display Error */}
+                    {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 
                     {/* Login Button */}
                     <button
