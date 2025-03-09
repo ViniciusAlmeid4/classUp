@@ -34,6 +34,21 @@ a.text-primary:hover {
     color: var(--primaryAccent);
 }
 
+.event-primary-list {
+    color: var(--foreground);
+
+    & .fc-daygrid-event-dot {
+        border-color: var(--primary);
+    }
+}
+
+.event-primary-block {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    padding-left: 6px;
+    color: var(--foreground);
+}
+
 @media (prefers-color-scheme: dark) {
     :root {
         --background: #1a181b;

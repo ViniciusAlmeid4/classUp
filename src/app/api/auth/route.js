@@ -6,23 +6,25 @@ import bcrypt from 'bcrypt';
 // import { serialize } from 'cookie';
 
 // Dummy user data (Replace with a real database query)
+// User types: professor, admin, representative and student
 const users = [
     {
         id: 1,
-        username: 'testeuser',
+        email: 'testeuser',
         password: '$2b$10$BYL0c1f1sse7Yl8HopY/iuWTl8GvHhBm6jvoeoqQUn8cs7wUv4EGO',
+        userType: 'admin'
     },
 ];
 
 const saltRounds = 10;
 
 export async function POST(req, res) {
-    let { username, password } = await req.json();
+    let { email, password } = await req.json();
 
     const secretKey = new TextEncoder().encode(process.env.jose_SECRET);
 
     // Find user in database
-    const user = users.find((u) => u.username === username);
+    const user = users.find((u) => u.email === email);
     if (!user) {
         return NextResponse.json(
             { message: 'Invalid credentials '},
@@ -40,7 +42,7 @@ export async function POST(req, res) {
     }
 
     // Generate jose
-    const token = await new SignJWT({ username: 'testuser' })
+    const token = await new SignJWT({ email: user.email, userType: user.userType })
         .setProtectedHeader({ alg: 'HS256' }) // Set the algorithm in the protected header
         .setExpirationTime('1h')
         .sign(secretKey);

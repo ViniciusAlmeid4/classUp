@@ -3,11 +3,11 @@
 import { useState } from 'react';
 import './login.css';
 
-async function login(username, password) {
+async function login(email, password) {
     const res = await fetch('/api/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ email, password }),
         credentials: 'include', // Ensures cookies are sent
     });
 

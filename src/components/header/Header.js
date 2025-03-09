@@ -20,10 +20,10 @@ export default function Header() {
 					<Link href="/" className="">
 						Home
 					</Link>
-					<Link href="/about" className="">
-						assignments
+					<Link href="/assignments" className="">
+						Assignments
 					</Link>
-					<Link href="/services" className="">
+					<Link href="/users" className="">
 						My Account
 					</Link>
 					{/* Admins only link
