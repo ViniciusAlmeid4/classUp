@@ -1,0 +1,67 @@
+.calendar-modal-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.calendar-modal-content {
+    background: var(--middleground);
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 400px;
+    position: relative;
+    z-index: 1;
+}
+
+.event-primary-list-item {
+    color: var(--foreground);
+
+    & .fc-daygrid-event-dot {
+        border-color: var(--primary);
+    }
+}
+
+.event-primary-block {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    padding-left: 6px;
+    color: var(--foreground);
+}
+
+.fc-popover-body .fc-daygrid-event-harness .event-primary-block{
+    border-radius: 3px;
+    margin-left: 0;
+}
+/* Style the entire header */
+/* .fc-toolbar {
+    background-color: #1a1a1a;
+    color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+} */
+
+/* Style header buttons */
+/* .fc-toolbar .fc-button {
+    background-color: var(--secondary);
+    color: var(--foreground);
+    border-color: var(--secondary);
+} */
+
+/* Hover effect for buttons */
+/* .fc-toolbar .fc-button:hover {
+    border-color: var(--secondaryAccent);
+    background-color: var(--secondaryAccent);
+} */
+
+/* .fc .fc-button-primary:not(:disabled).fc-button-active, .fc .fc-button-primary:not(:disabled):active {
+    background-color: var(--secondaryAccent);
+    border-color: var(--secondaryAccent);
+    color: var(--foreground);
+} */

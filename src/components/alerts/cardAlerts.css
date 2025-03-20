@@ -1,6 +1,6 @@
 .card-alerts {
     padding: 5px;
-    border: solid 1px #dddddd;
+    border: solid 1px var(--border-color);
     border-radius: 15px;
 }
 
