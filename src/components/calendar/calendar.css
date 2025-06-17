@@ -1,31 +1,13 @@
-.calendar-modal-overlay {
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-}
-
-.calendar-modal-content {
-    background: var(--middleground);
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 400px;
-    position: relative;
-    z-index: 1;
-}
-
 .event-primary-list-item {
     color: var(--foreground);
 
     & .fc-daygrid-event-dot {
         border-color: var(--primary);
     }
+}
+
+.event-primary-list-item:hover {
+    background-color: #000;
 }
 
 .event-primary-block {
@@ -38,6 +20,10 @@
 .fc-popover-body .fc-daygrid-event-harness .event-primary-block{
     border-radius: 3px;
     margin-left: 0;
+}
+
+.fc-button{
+    transition: 0.2s;
 }
 /* Style the entire header */
 /* .fc-toolbar {

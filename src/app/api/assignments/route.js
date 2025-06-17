@@ -19,7 +19,7 @@ export async function POST(req) {
 
     const user = jose.decodeJwt(token);
 
-    if (user.userType !== 'admin') {
+    if (user.userType !== 'representative' && user.userType !== 'professor') {
         console.log(error);
         return NextResponse.redirect(new URL('/login', req.url)); // Redirect if token is invalid
     }

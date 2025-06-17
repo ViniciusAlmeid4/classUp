@@ -6,34 +6,30 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import Modal from 'react-modal';
 import brLocale from '@fullcalendar/core/locales/pt-br';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './calendar.css';
 
-export default function Calendar() {
-    const [events, setEvents] = useState([
-        {
-            id: 1,
-            title: 'teste 1',
-            start: '2025-03-04',
-            classNames: ['event-primary-block'],
-            display: 'block',
-        },
-        {
-            id: 2,
-            title: 'teste 2',
-            start: '2025-03-14',
-            end: '2025-03-16',
-            classNames: ['event-primary-block'],
-            display: 'block',
-        },
-    ]);
+export default function Calendar({ userType }) {
+    const [events, setEvents] = useState();
+
+    useEffect(() => {
+        fetch('/api/events', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+        }).then((response) => {
+            response.json().then((resJson) => {
+                setEvents(resJson.events);
+            });
+        });
+    }, []);
+
     // ---- Modal variables
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalTitle, setModalTitle] = useState('');
     const [modalType, setModalType] = useState('');
 
     // ---- Event variables
-    let newEventId = useRef(3);
     const [eventId, setEventId] = useState('');
     const [eventTitle, setEventTitle] = useState('');
     const [eventType, setEventType] = useState('block');
@@ -53,53 +49,93 @@ export default function Calendar() {
     }
 
     function createEvent() {
-        setModalIsOpen(false);
-
         const newEvent = {
-            id: newEventId.current, // Use `.current`
             title: eventTitle,
             start: eventStart,
             allDay: eventAllDay || false,
             classNames: [`event-primary-${eventType}`],
-            display: eventType || 'block', // Default to "block"
+            display: eventType || 'block',
         };
 
         if (eventEnd) {
             newEvent.end = eventEnd;
         }
 
-        if (events) {
+        fetch('/api/events', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newEvent),
+        })
+        .then((response) => {
+            if (!response.ok) throw new Error('Failed to create event');
+            return response.json();
+        })
+        .then((json) => {
+            newEvent.id = json.eventId;
             setEvents([newEvent, ...events]);
-        } else {
-            setEvents([newEvent]);
-        }
-
-        newEventId.current++; // Increment ref correctly
+            setModalIsOpen(false);
+        });
     }
 
     function updateEvent() {
-        setEvents(
-            events.map((event) =>
-                event.id == eventId
-                    ? {
-                          ...event,
-                          title: eventTitle,
-                          start: eventStart,
-                          allDay: eventAllDay,
-                          display: eventType,
-                          end: eventEnd,
-                      }
-                    : event
-            )
-        );
-        console.log(events);
-        
-        setModalIsOpen(false);
+        fetch('/api/events', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify( {
+                id: eventId,
+                title: eventTitle,
+                start: eventStart,
+                allDay: eventAllDay,
+                display: eventType,
+                end: eventEnd,
+            }),
+        })
+        .then((response) => {
+            if (!response.ok) throw new Error('Failed to create event');
+            return response.json();
+        })
+        .then((json) => {
+            setEvents(
+                events.map((event) =>
+                    event.id == eventId
+                        ? {
+                              ...event,
+                              title: eventTitle,
+                              start: eventStart,
+                              allDay: eventAllDay,
+                              classNames: [`event-primary-${eventType}`],
+                              display: eventType,
+                              end: eventEnd,
+                          }
+                        : event
+                )
+            );
+            setModalIsOpen(false);
+        });        
     }
 
     function deleteEvent() {
-        setEvents(events.filter((event) => event.id != eventId));
-        setModalIsOpen(false);
+        fetch('/api/events', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify( {
+                id: eventId
+            }),
+        })
+        .then((response) => {
+            if (!response.ok) throw new Error('Failed to create event');
+            return response.json();
+        })
+        .then((json) => {
+            setEvents(events.filter((event) => event.id != eventId));
+            setModalIsOpen(false);
+        });
     }
 
     /**
@@ -121,7 +157,8 @@ export default function Calendar() {
                 height="100%"
                 selectable={true}
                 events={events}
-                eventTimeFormat= {{ // like '14:30
+                eventTimeFormat={{
+                    // like '14:30
                     hour: '2-digit',
                     minute: '2-digit',
                     // meridiem: false
@@ -160,7 +197,7 @@ export default function Calendar() {
                 fixedWeekCount={true}
                 customButtons={{
                     openModalButton: {
-                        text: 'Adicionar evento',
+                        text: 'Novo',
                         click: () => {
                             setModalIsOpen(true);
                             setModalTitle('Criar evento');
@@ -171,7 +208,7 @@ export default function Calendar() {
                 locale={brLocale}
                 navLinks="true"
                 headerToolbar={{
-                    left: 'today openModalButton', // Place the button in the header
+                    left: userType === 'representative' || userType === 'professor' ? 'today openModalButton' : 'today', // Place the button in the header
                     center: 'title',
                     right: 'prev,next dayGridMonth,timeGridDay',
                 }}
@@ -196,6 +233,7 @@ export default function Calendar() {
                                 name="event-title"
                                 id="event-title"
                                 className="input-primary"
+                                disabled={userType !== 'representative' && userType !== 'professor'}
                                 value={eventTitle}
                                 onChange={(e) => {
                                     setEventTitle(e.target.value);
@@ -214,6 +252,7 @@ export default function Calendar() {
                                 name="event-start"
                                 id="event-start"
                                 className="input-primary"
+                                disabled={userType !== 'representative' && userType !== 'professor'}
                                 value={eventStart}
                                 onChange={(e) => {
                                     setEventStart(e.target.value);
@@ -231,6 +270,7 @@ export default function Calendar() {
                                 name="event-end"
                                 id="event-end"
                                 className="input-primary"
+                                disabled={userType !== 'representative' && userType !== 'professor'}
                                 value={eventEnd}
                                 onChange={(e) => {
                                     setEventEnd(e.target.value);
@@ -247,6 +287,7 @@ export default function Calendar() {
                                 id="event-type"
                                 name="event-type"
                                 className="input-primary"
+                                disabled={userType !== 'representative' && userType !== 'professor'}
                                 value={eventType}
                                 onChange={(e) => setEventType(e.target.value)}
                             >
@@ -264,6 +305,7 @@ export default function Calendar() {
                                 id="event-all-day"
                                 name="event-all-day"
                                 className="input-primary"
+                                disabled={userType !== 'representative' && userType !== 'professor'}
                                 value={eventAllDay}
                                 onChange={(e) => setEventAllDay(e.target.value === 'true')}
                             >
@@ -273,12 +315,12 @@ export default function Calendar() {
                         </div>
                     </div>
                 </div>
-                <div className="flex">
-                    <button className="mt-6 me-auto btn-primary" onClick={closeModal}>
+                <div className="flex mt-6">
+                    <button className="me-auto btn-primary" onClick={closeModal}>
                         Close
                     </button>
-                    {modalType === 'update' && (
-                        <div className="flex gap-2 mt-6 ms-auto">
+                    {(userType === 'representative' || userType === 'professor') && modalType === 'update' && (
+                        <div className="flex gap-2 ms-auto">
                             <button className="btn-primary" onClick={updateEvent}>
                                 Editar
                             </button>
@@ -287,8 +329,8 @@ export default function Calendar() {
                             </button>
                         </div>
                     )}
-                    {modalType == 'add' && (
-                        <button className="mt-6 ms-auto btn-primary" onClick={createEvent}>
+                    {(userType === 'representative' || userType === 'professor') && modalType == 'add' && (
+                        <button className="ms-auto btn-primary" onClick={createEvent}>
                             Criar
                         </button>
                     )}
