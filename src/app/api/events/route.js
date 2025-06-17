@@ -33,7 +33,7 @@ export async function POST(req) {
     if (token) {
         try {
             const { payload } = await jwtVerify(token, secretKey);
-            if (payload.userType != 'representative' || 'professor') {
+            if (payload.userType !== 'representative' && payload.userType !== 'professor') {
                 return NextResponse.json({ message: 'Você não tem permissão para realizar essa ação' }, { status: 403 });
             }
             userId = payload.id;
