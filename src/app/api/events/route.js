@@ -73,7 +73,7 @@ export async function PUT(req) {
     if (token) {
         try {
             const { payload } = await jwtVerify(token, secretKey);
-            if (payload.userType != 'representative' || 'professor') {
+            if (payload.userType !== 'representative' && payload.userType !== 'professor') {
                 return NextResponse.json({ message: 'Você não tem permissão para realizar essa ação' }, { status: 403 });
             }
             // userId = payload.id;
@@ -113,7 +113,7 @@ export async function DELETE(req) {
     if (token) {
         try {
             const { payload } = await jwtVerify(token, secretKey);
-            if (payload.userType != 'representative' || payload.userType != 'professor') {
+            if (payload.userType !== 'representative' && payload.userType !== 'professor') {
                 return NextResponse.json({ message: 'Você não tem permissão para realizar essa ação' }, { status: 403 });
             }
             // userId = payload.id;
