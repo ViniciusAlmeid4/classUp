@@ -150,7 +150,7 @@ export default function Calendar({ userType }) {
     return (
         <div className="w-full h-full p-5 flex flex-col" id="calendar-element">
             <FullCalendar
-                timeZone="UTC"
+                timeZone="local"
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                 initialView="dayGridMonth"
                 editable={true}
@@ -316,9 +316,6 @@ export default function Calendar({ userType }) {
                     </div>
                 </div>
                 <div className="flex mt-6">
-                    <button className="me-auto btn-primary" onClick={closeModal}>
-                        Close
-                    </button>
                     {(userType === 'representative' || userType === 'professor') && modalType === 'update' && (
                         <div className="flex gap-2 ms-auto">
                             <button className="btn-primary" onClick={updateEvent}>

@@ -2,16 +2,18 @@
     padding: 20px 35px;
     border: solid 1px var(--border-color);
     border-radius: 15px;
+    background-color: var(--middleground);
 }
 
 .custom-card {
     position: relative;
     padding: 0;
-    border: solid 1px var(--border-color);
+    border: solid 1px rgba(0, 0, 0, 0.21);
     border-radius: 8px;
-    box-shadow: 0px 0px 11px 4px rgba(0, 0, 0, 0.025);
-    -webkit-box-shadow: 0px 0px 11px 4px rgba(0, 0, 0, 0.025);
-    -moz-box-shadow: 0px 0px 11px 4px rgba(0, 0, 0, 0.025);
+    box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.21);
+    -webkit-box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.21);
+    -moz-box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.21);
+    border-left: solid 6px #51d0faaf;
 
     @media (prefers-color-scheme: dark) {
         box-shadow: 0px 0px 11px 4px rgba(0, 0, 0, 0.21);
@@ -34,6 +36,18 @@
     }
 }
 
+.card-info {
+    border-left: solid 6px #51d0faaf;
+}
+
+.card-warning {
+    border-left: solid 6px #fae951af;
+}
+
+.card-critical {
+    border-left: solid 6px #fa5151af;
+}
+
 .custom-card:hover .delete-button {
     opacity: 1;
     visibility: visible;
@@ -43,11 +57,9 @@
     position: absolute;
     top: 10px;
     right: 10px;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
+    width: 16px;
+    height: 12px;
     background-color: transparent;
-    border: 1px solid var(--border-color);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -55,11 +67,13 @@
     transition: all 0.2s ease;
     opacity: 0;
     visibility: hidden;
+    line-height: 0;
+    font-weight: bold;
 }
 
 .delete-button:hover {
-    background-color: #ff4444;
-    color: white;
+    color: var(--secondary);
+    /* color: white; */
 }
 
 /* @media (prefers-color-scheme: dark) {

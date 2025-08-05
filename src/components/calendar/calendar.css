@@ -7,7 +7,7 @@
 }
 
 .event-primary-list-item:hover {
-    background-color: #000;
+    background-color: var(--background);
 }
 
 .event-primary-block {
@@ -17,14 +17,45 @@
     color: var(--foreground);
 }
 
-.fc-popover-body .fc-daygrid-event-harness .event-primary-block{
+.fc-popover-body .fc-daygrid-event-harness .event-primary-block {
     border-radius: 3px;
     margin-left: 0;
 }
 
-.fc-button{
+.fc-button {
     transition: 0.2s;
 }
+
+.fc-daygrid-day-frame,
+.fc-col-header-cell {
+    background-color: var(--middleground);
+}
+
+@media (prefers-color-scheme: dark) {
+    .event-primary-list-item:hover {
+        background-color: #000;
+    }
+}
+
+.fc-openModalButton-button {
+    background-color: var(--secondaryAccent) !important;
+    border-color: var(--secondaryAccent) !important;
+    color: #f1f1f1 !important;
+}
+
+.fc-openModalButton-button:hover {
+    background-color: var(--secondary) !important;
+    border-color: var(--secondary) !important;
+}
+
+.fc-button-primary:focus {
+    box-shadow: none !important;
+}
+
+.fc .fc-button-primary:hover:not(:disabled) {
+    color: #f1f1f1
+}
+
 /* Style the entire header */
 /* .fc-toolbar {
     background-color: #1a1a1a;
@@ -46,8 +77,6 @@
     background-color: var(--secondaryAccent);
 } */
 
-/* .fc .fc-button-primary:not(:disabled).fc-button-active, .fc .fc-button-primary:not(:disabled):active {
-    background-color: var(--secondaryAccent);
-    border-color: var(--secondaryAccent);
-    color: var(--foreground);
-} */
+.fc .fc-button-primary:not(:disabled).fc-button-active, .fc .fc-button-primary:not(:disabled):active {
+    color: #f1f1f1;
+}

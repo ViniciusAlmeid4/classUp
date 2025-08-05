@@ -8,28 +8,33 @@ export default function UserList() {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalUser, setModalUser] = useState({});
     const [modalFormData, setModalFormData] = useState({});
+    const [searchTerm, setSearchTerm] = useState('');
 
     function closeModal() {
         setModalIsOpen(false);
-        setModalUser({});
+        setModalUser(null);
         setModalFormData({});
     }
 
-    useEffect(() => {
-        async function getUsers() {
-            const res = await fetch('/api/users', {
-                method: 'GET',
-                headers: { 'content-type': 'application/json' },
-                credentials: 'include',
-            });
-            const dataRes = await res.json();
-            if (res.ok) {
-                setUsers(dataRes.users);
-            } else {
-                console.error('Failed to fetch users:', dataRes.error);
-            }
+    async function getUsers(name = '') {
+        let url = '/api/users';
+        if (name) {
+            url += `?name=${encodeURIComponent(name)}`;
         }
+        const res = await fetch(url, {
+            method: 'GET',
+            headers: { 'content-type': 'application/json' },
+            credentials: 'include',
+        });
+        const dataRes = await res.json();
+        if (res.ok) {
+            setUsers(dataRes.users);
+        } else {
+            console.error('Failed to fetch users:', dataRes.error);
+        }
+    }
 
+    useEffect(() => {
         Modal.setAppElement('#app');
         getUsers();
     }, []);
@@ -43,7 +48,7 @@ export default function UserList() {
         });
     }
 
-    function handelReject(userId) {
+    function handleReject(userId) {
         fetch(`/api/users/${userId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
@@ -91,20 +96,66 @@ export default function UserList() {
 
     return (
         <>
-            <div className="flex flex-col items-center justify-start w-full h-full p-4" id="app">
-                <div className="my-10">
-                    <span className="text-2xl font-bold">Lista de Usuários</span>
+            <div className="flex flex-col items-start w-full h-screen p-4 gap-4" id="app">
+                {/* Barra de busca */}
+                <div className="w-full flex items-center justify-center gap-4 my-6">
+                    <input
+                        id="search-user"
+                        name="search-user"
+                        type="text"
+                        className="w-64 px-3 py-1.5 border rounded-md"
+                        placeholder="Nome do usuário..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+
+                    <button
+                        className="btn-primary px-4 py-1.5 rounded-md"
+                        onClick={() => getUsers(searchTerm)}
+                    >
+                        Buscar
+                    </button>
                 </div>
-                <div className="h-100 flex gap-8 items-center sm:items-start">
-                    {users.map((user) => (
-                        <UserCard
-                            key={user.id}
-                            user={user}
-                            onAccept={handleAccept}
-                            onReject={handelReject}
-                            onEdit={() => handleEdit(user)}
-                        />
-                    ))}
+
+                {/* Conteúdo de usuários */}
+                <div className="flex w-full gap-6 flex-1 overflow-hidden">
+                    {/* Usuários aceitos */}
+                    <div className="w-2/3">
+                        <h2 className="text-xl font-bold mb-4">Lista de Aceitos</h2>
+                        <div className="overflow-y-auto max-h-[calc(100vh-220px)] pr-2">
+                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2">
+                                {users
+                                    .filter((user) => user.status !== 'awaiting')
+                                    .map((user) => (
+                                        <UserCard
+                                            key={user.id}
+                                            user={user}
+                                            onAccept={handleAccept}
+                                            onReject={handleReject}
+                                            onEdit={() => handleEdit(user)}
+                                        />
+                                    ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Pendentes */}
+                    <div className="w-1/3">
+                        <h2 className="text-xl font-bold mb-4">Pendentes</h2>
+                        <div className="overflow-y-auto max-h-[calc(100vh-220px)] pr-2 space-y-4">
+                            {users
+                                .filter((user) => user.status === 'awaiting')
+                                .map((user) => (
+                                    <UserCard
+                                        key={user.id}
+                                        user={user}
+                                        onAccept={handleAccept}
+                                        onReject={handleReject}
+                                        onEdit={() => handleEdit(user)}
+                                    />
+                                ))}
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -115,7 +166,7 @@ export default function UserList() {
                 className="calendar-modal-content"
                 overlayClassName="calendar-modal-overlay"
             >
-                <h2 className="text-base/7 font-semibold">{modalFormData.fullName || ''}</h2>
+                <h2 className="text-base/7 font-semibold">{modalFormData?.fullName || ''}</h2>
 
                 <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-12 h-fit">
                     <div className="sm:col-span-12">
@@ -126,7 +177,7 @@ export default function UserList() {
                             type="text"
                             id="fullName"
                             className="input-primary mt-2"
-                            value={modalFormData.fullName}
+                            value={modalFormData?.fullName || ''}
                             onChange={(e) =>
                                 setModalFormData({ ...modalFormData, fullName: e.target.value })
                             }
@@ -141,7 +192,7 @@ export default function UserList() {
                             type="email"
                             id="email"
                             className="input-primary mt-2"
-                            value={modalFormData.email}
+                            value={modalFormData?.email || ''}
                             onChange={(e) =>
                                 setModalFormData({ ...modalFormData, email: e.target.value })
                             }
@@ -155,7 +206,7 @@ export default function UserList() {
                         <select
                             id="type"
                             className="input-primary mt-2"
-                            value={modalFormData.type}
+                            value={modalFormData?.type || ''}
                             onChange={(e) =>
                                 setModalFormData({ ...modalFormData, type: e.target.value })
                             }
@@ -174,7 +225,7 @@ export default function UserList() {
                             type="text"
                             id="ra"
                             className="input-primary mt-2"
-                            value={modalFormData.RA}
+                            value={modalFormData?.RA || ''}
                             onChange={(e) =>
                                 setModalFormData({ ...modalFormData, RA: e.target.value })
                             }
@@ -189,7 +240,7 @@ export default function UserList() {
                             type="text"
                             id="className"
                             className="input-primary mt-2"
-                            value={modalFormData.className}
+                            value={modalFormData?.className || ''}
                             onChange={(e) =>
                                 setModalFormData({
                                     ...modalFormData,
@@ -203,24 +254,24 @@ export default function UserList() {
                         <label htmlFor="status" className="block text-sm/6 font-medium">
                             Status
                         </label>
-                        <input
-                            type="text"
+                        <select
                             id="status"
                             className="input-primary mt-2"
-                            value={modalFormData.status}
+                            value={modalFormData?.status || ''}
                             onChange={(e) =>
                                 setModalFormData({ ...modalFormData, status: e.target.value })
                             }
-                        />
+                        >
+                            <option value="accepted">Aceito</option>
+                            <option value="rejected">Rejeitado</option>
+                            <option value="awaiting">Aguardando</option>
+                        </select>
                     </div>
                 </div>
 
-                <div className="flex justify-between mt-6">
+                <div className="flex justify-end mt-6">
                     <button className="btn-primary" onClick={submitEdit}>
                         Editar
-                    </button>
-                    <button className="btn-primary" onClick={closeModal}>
-                        Close
                     </button>
                 </div>
             </Modal>

@@ -5,9 +5,21 @@ import { jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 import { db } from '@/models/db';
 
+export async function GET(req, {params}) {
+    
+}
+
 export async function PATCH(req, { params }) {
     const { id } = await params;
-    const body = await req.json();
+    let body;
+    try {
+        body = await req.json();
+    } catch (err) {
+        return NextResponse.json(
+            { message: 'Corpo da requisição inválido ou ausente' },
+            { status: 400 }
+        );
+    }
 
     const cookieStore = await cookies();
     const token = cookieStore.get('authToken')?.value;

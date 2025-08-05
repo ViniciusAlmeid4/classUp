@@ -4,11 +4,11 @@ import { useState } from 'react';
 import Link from 'next/link';
 import './header.css';
 
-export default function Header({userType}) {
+export default function Header({ userType }) {
     const [isOpen, setIsOpen] = useState(false);
-    
+
     return (
-        <header className="bg-neutral-800 shadow-md">
+        <header className="shadow-md">
             <div className="container mx-auto px-6 py-4 flex justify-between items-center custom-header">
                 {/* LOGO */}
                 <Link href="/">
@@ -18,20 +18,16 @@ export default function Header({userType}) {
                 {/* DESKTOP MENU */}
                 <nav className="hidden md:flex text-neutral-300 space-x-6">
                     <Link href="/" className="">
-                        Home
+                        Calendário
                     </Link>
                     {(userType === 'representative' || userType === 'professor') && (
                         <Link href="/users" className="">
-                            Users
+                            Usuários
                         </Link>
                     )}
-                    <Link href="/users" className="">
-                        My Account
+                    <Link href="/my-info" className="">
+                        Meus dados
                     </Link>
-                    {/* Admins only link
-                    <Link href="/contact" className="">
-						Contact
-					</Link> */}
                 </nav>
 
                 {/* MOBILE MENU BUTTON */}
@@ -61,22 +57,22 @@ export default function Header({userType}) {
             {isOpen && (
                 <nav className="md:hidden bg-gray-100">
                     <Link href="/" className="block py-2 px-4 text-gray-700 hover:bg-gray-200">
-                        Home
+                        Calendário
                     </Link>
-                    <Link href="/about" className="block py-2 px-4 text-gray-700 hover:bg-gray-200">
-                        About
-                    </Link>
+                    {(userType === 'representative' || userType === 'professor') && (
+                        <Link
+                            href="/users"
+                            className="block py-2 px-4 text-gray-700 hover:bg-gray-200"
+                        >
+                            Usuários
+                        </Link>
+                    )}
+
                     <Link
-                        href="/services"
+                        href="/my-info"
                         className="block py-2 px-4 text-gray-700 hover:bg-gray-200"
                     >
-                        Services
-                    </Link>
-                    <Link
-                        href="/contact"
-                        className="block py-2 px-4 text-gray-700 hover:bg-gray-200"
-                    >
-                        Contact
+                        Meus dados
                     </Link>
                 </nav>
             )}

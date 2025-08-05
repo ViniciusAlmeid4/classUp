@@ -6,23 +6,23 @@
 }
 
 :root {
-    --background: #d4d4d4;
-    --middleground: #fdfdfd;
+    --background: #f0f0f0;
+    --middleground: #fbfbfb;
     --foreground: #1a181b;
-    --border-color: #ddd;
-    --primary: #2dcb77; /* A more vibrant green with increased saturation */
-    --primaryAccent: #1c7f53; /* Deeper green for better contrast */
+    --border-color: #4d4d4d;
+    --primary: #0ace65; /* A more vibrant green with increased saturation */
+    --primaryAccent: #44af5b; /* Deeper green for better contrast */
 
     --secondary: #911be0; /* Bold, energetic purple */
-    --secondaryAccent: #7a159b; /* A muted purple for interactive states */
+    --secondaryAccent: #770b9b; /* A muted purple for interactive states */
 
     --fc-small-font-size: 0.85em;
     --fc-page-bg-color: var(--middleground);
     --fc-neutral-bg-color: hsla(0, 0%, 82%, 0.3);
     --fc-neutral-text-color: grey;
     --fc-border-color: var(--border-color);
-    --fc-button-text-color: #d4d4d4;
-    --fc-button-bg-color: var(--secondary);
+    --fc-button-text-color: var(--foreground);
+    --fc-button-bg-color: transparent;
     --fc-button-border-color: var(--secondary);
     --fc-button-hover-bg-color: var(--secondaryAccent);
     --fc-button-hover-border-color: var(--secondaryAccent);
@@ -77,24 +77,45 @@ a.text-primary:hover {
     max-height: fit-content;
     transition: 0.2s;
     cursor: pointer;
+    color: #f1f1f1;
+}
+
+.btn-primary-outlier {
+    padding: 6px 16px;
+    background-color: transparent;
+    border-radius: 8px;
+    border: solid 4px var(--primary);
+    max-width: fit-content;
+    max-height: fit-content;
+    transition: 0.2s;
+    cursor: pointer;
+    color: var(--primary);
 }
 
 .btn-primary:hover {
     background-color: var(--primaryAccent);
+    color: #f1f1f1;
+}
+
+.btn-primary-outlier:hover {
+    background-color: var(--primary);
+    color: #f1f1f1;
 }
 
 .btn-secondary {
     padding: 6px 16px;
-    background-color: var(--secondary);
+    background-color: var(--secondaryAccent);
     border-radius: 8px;
     max-width: fit-content;
     max-height: fit-content;
     transition: 0.2s;
     cursor: pointer;
+    color: #f1f1f1;
 }
 
 .btn-secondary:hover {
-    background-color: var(--secondaryAccent);
+    background-color: var(--secondary);
+    color: #f1f1f1;
 }
 
 .input-primary {
@@ -166,7 +187,7 @@ select.input-primary {
         --background: #1a181b;
         --middleground: #313131;
         --foreground: #f1f1f1;
-        --border-color: #313131;
+        --border-color: #1f1f1f;
         --primary: #27d624; /* Vibrant neon green */
         --primaryAccent: #27f21f; /* Slightly darker green for hover/focus */
 

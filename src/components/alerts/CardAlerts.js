@@ -73,7 +73,7 @@ export default function CardAlerts({ userType }) {
             id="warnings-element"
         >
             <div className="w-full flex flex-row justify-between px-2">
-                <h2 className="text-[1.75em] mb-2">Warnings</h2>
+                <h2 className="text-[1.75em] mb-2">Avisos</h2>
                 {canEdit && (
                     <button onClick={() => setIsModalOpen(true)} className="btn-secondary">
                         Novo
@@ -90,13 +90,7 @@ export default function CardAlerts({ userType }) {
                     warnings.map((w) => (
                         <div
                             key={w.id}
-                            className={`w-full custom-card border-l-4 relative ${
-                                w.level === 'info'
-                                    ? 'border-blue-500'
-                                    : w.level === 'warning'
-                                    ? 'border-yellow-500'
-                                    : 'border-red-500'
-                            }`}
+                            className={`w-full custom-card border-l-4 relative card-${ w.level }`}
                         >
                             {canEdit && (
                                 <button
@@ -169,13 +163,6 @@ export default function CardAlerts({ userType }) {
                         </div>
                     </div>
                     <div className="flex mt-6">
-                        <button
-                            type="button"
-                            className="btn-secondary me-auto"
-                            onClick={() => setIsModalOpen(false)}
-                        >
-                            Fechar
-                        </button>
                         <button type="submit" className="btn-secondary ms-auto">
                             Criar
                         </button>
